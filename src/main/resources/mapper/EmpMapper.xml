@@ -26,16 +26,6 @@
         ORDER BY e.update_time DESC
     </select>
 
-    <!-- 新增员工 -->
-    <insert id="addEmp" parameterType="com.tk.tliaswebmanagment.pojo.Emp">
-        INSERT INTO emp (
-            username, password, name, gender, phone, job, salary, image,
-            entry_date, dept_id, create_time, update_time
-        ) VALUES (
-            #{username}, #{password}, #{name}, #{gender}, #{phone}, #{job}, #{salary}, #{image},
-            #{entryDate}, #{deptId}, #{createDate}, #{updateDate}
-        )
-    </insert>
 
     <!-- 修改员工 -->
     <update id="updateEmp" parameterType="com.tk.tliaswebmanagment.pojo.Emp">

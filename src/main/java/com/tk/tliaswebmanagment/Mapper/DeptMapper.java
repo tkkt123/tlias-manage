@@ -2,7 +2,6 @@ package com.tk.tliaswebmanagment.Mapper;
 
 import com.tk.tliaswebmanagment.pojo.Dept;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -15,7 +14,7 @@ public interface DeptMapper {
     void deleteDept(int id);
 
     @Insert("insert into dept(name,create_time,update_time) values(#{name},#{createTime},#{updateTime})")
-    void addDept(Dept dept);
+    void insertDept(Dept dept);
 
     @Update("update dept set name=#{name},update_time=#{updateTime} where id=#{id}")
     void updateDept(Dept dept);

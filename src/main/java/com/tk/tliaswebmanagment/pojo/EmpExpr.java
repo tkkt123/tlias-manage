@@ -1,12 +1,19 @@
 package com.tk.tliaswebmanagment.pojo;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmpExpr {
     private Integer id;
     private Integer empId;
-    private LocalDateTime start;
-    private LocalDateTime end;
+    private LocalDate begin;
+    private LocalDate end;
     private String company;
     private String job;
 }

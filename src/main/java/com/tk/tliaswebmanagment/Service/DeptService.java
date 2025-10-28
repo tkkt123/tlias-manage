@@ -9,7 +9,7 @@ public interface DeptService {
 
     void deleteDept(int id);
 
-    void addDept(Dept dept);
+    void insertDept(Dept dept);
 
     void updateDept(Dept dept);
 

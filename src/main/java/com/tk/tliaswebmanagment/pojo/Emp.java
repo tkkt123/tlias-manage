@@ -3,6 +3,7 @@ package com.tk.tliaswebmanagment.pojo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,5 +28,5 @@ public class Emp {
     private LocalDateTime updateDate;
     private String deptName;
 
-    private List<EmpExpr> empExprs;
+    private List<EmpExpr> exprList;
 }

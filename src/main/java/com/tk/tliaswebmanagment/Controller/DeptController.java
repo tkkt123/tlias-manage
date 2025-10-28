@@ -30,9 +30,9 @@ public class DeptController {
 
     //部门添加
     @PostMapping("/depts")
-    public Result addDept(@RequestBody Dept dept) {
+    public Result insertDept(@RequestBody Dept dept) {
         System.out.println(dept);
-        deptService.addDept(dept);
+        deptService.insertDept(dept);
         return Result.success();
     }
 

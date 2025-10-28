@@ -2,24 +2,23 @@ package com.tk.tliaswebmanagment.Service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.tk.tliaswebmanagment.Mapper.EmpExprMapper;
 import com.tk.tliaswebmanagment.Mapper.EmpMapper;
 import com.tk.tliaswebmanagment.Service.EmpService;
-import com.tk.tliaswebmanagment.pojo.Emp;
-import com.tk.tliaswebmanagment.pojo.EmpQuerryParam;
-import com.tk.tliaswebmanagment.pojo.PageResult;
-import com.tk.tliaswebmanagment.pojo.Result;
+import com.tk.tliaswebmanagment.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 public class EmpServiceImpl implements EmpService {
     @Autowired
     EmpMapper empMapper;
+    @Autowired
+    EmpExprMapper empExprMapper;
 
     @Override
     public PageResult getEmpByPage(EmpQuerryParam empQuerryParam) {
@@ -31,13 +30,26 @@ public class EmpServiceImpl implements EmpService {
         Page<Emp> p=(Page<Emp>)list;
         return new PageResult(p.getTotal(), p.getResult());
     }
-    
-     @Override
-    public Result addEmp(Emp emp) {
+
+    @Transactional
+    @Override
+    public Result insertEmp(Emp emp) {
         // 设置创建时间和更新时间
         emp.setCreateDate(LocalDateTime.now());
         emp.setUpdateDate(LocalDateTime.now());
-        empMapper.addEmp(emp);
+        // 插入员工
+        empMapper.insertEmp(emp);
+        // 插入员工工作经历
+        if (emp.getExprList() != null && !emp.getExprList().isEmpty()) {
+            for (EmpExpr empExpr : emp.getExprList()) {
+                empExpr.setEmpId(emp.getId());
+                empExprMapper.insertEmpExpr(empExpr);
+            }
+            return Result.success();
+        }
+        else{
+            System.out.println("员工" + emp.getName() + "没有工作经历");
+        }
         return Result.success();
     }
     
