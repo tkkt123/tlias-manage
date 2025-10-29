@@ -13,7 +13,7 @@ public interface EmpMapper {
     // 插入员工时，返回自增的id
     @Options(useGeneratedKeys = true, keyProperty = "id")
     @Insert("INSERT INTO emp (username, password, name, gender, phone, job, salary, image, entry_date, dept_id, create_time, update_time) " +
-            "VALUES (#{username}, #{password}, #{name}, #{gender}, #{phone}, #{job}, #{salary}, #{image}, #{entryDate}, #{deptId}, #{createDate}, #{updateDate})")
+            "VALUES (#{username}, #{password}, #{name}, #{gender}, #{phone}, #{job}, #{salary}, #{image}, #{entryDate}, #{deptId}, #{createTime}, #{updateTime})")
     void insertEmp(Emp emp);
 
     void updateEmp(Emp emp);
@@ -22,6 +22,5 @@ public interface EmpMapper {
 
     Emp getEmpById(Integer id);
 
-    @Select("SELECT * FROM emp")
     List<Emp> getEmpList();
 }

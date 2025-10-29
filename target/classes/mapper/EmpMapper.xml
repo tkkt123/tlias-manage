@@ -13,7 +13,19 @@
 
     <!-- 动态查询员工列表 -->
     <select id="getEmpByPage" parameterType="com.tk.tliaswebmanagment.pojo.EmpQuerryParam" resultType="com.tk.tliaswebmanagment.pojo.Emp">
-        SELECT e.*, d.name AS deptName
+        SELECT e.id,
+               e.username,
+               e.name,
+               e.gender,
+               e.phone,
+               e.job,
+               e.salary,
+               e.image,
+               e.entry_date,
+               e.dept_id,
+               e.create_time,
+               e.update_time,
+               d.name AS deptName
         FROM emp e
         LEFT JOIN dept d ON e.dept_id = d.id
         <where>
@@ -60,6 +72,25 @@
             left join dept d on e.dept_id = d.id
             left join emp_expr eexpr on e.id = eexpr.emp_id
         where e.id = #{id}
+    </select>
+
+        <!-- 查询所有员工 -->
+    <select id="getEmpList" resultType="com.tk.tliaswebmanagment.pojo.Emp">
+        select
+            e.id,
+            e.username,
+            e.name,
+            e.gender,
+            e.phone,
+            e.job,
+            e.salary,
+            e.image,
+            e.entry_date,
+            e.dept_id,
+            e.create_time,
+            e.update_time,
+            d.name as dept_name
+        from emp as e left join dept as d on e.dept_id = d.id
     </select>
 
 

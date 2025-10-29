@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,8 +36,8 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public Result insertEmp(Emp emp) {
         // 设置创建时间和更新时间
-        emp.setCreateDate(LocalDateTime.now());
-        emp.setUpdateDate(LocalDateTime.now());
+        emp.setCreateTime(LocalDateTime.now());
+        emp.setUpdateTime(LocalDateTime.now());
         // 插入员工
         empMapper.insertEmp(emp);
         // 插入员工工作经历
@@ -63,7 +64,7 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public Result updateEmp(Emp emp) {
         //设置更新时间
-        emp.setUpdateDate(LocalDateTime.now());
+        emp.setUpdateTime(LocalDateTime.now());
         empMapper.updateEmp(emp);
         // 更新员工工作经历(先删除再插入)
         if (emp.getExprList() != null && !emp.getExprList().isEmpty()) {
