@@ -41,4 +41,13 @@ public class EmpController {
         }
         return empService.deleteEmps(ids);
     }
+
+    @GetMapping("/emps/{id}")
+    public Result getEmpById(@PathVariable Integer id) {
+        Emp emp = empService.getEmpById(id);
+        if (emp == null) {
+            return Result.error("员工不存在");
+        }
+        return Result.success(emp);
+    }
 }

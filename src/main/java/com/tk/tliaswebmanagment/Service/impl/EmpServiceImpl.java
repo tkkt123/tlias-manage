@@ -52,12 +52,21 @@ public class EmpServiceImpl implements EmpService {
         }
         return Result.success();
     }
-    
+
+    @Transactional
     @Override
     public Result updateEmp(Emp emp) {
-        // 设置更新时间
+        //设置更新时间
         emp.setUpdateDate(LocalDateTime.now());
         empMapper.updateEmp(emp);
+        // 更新员工工作经历(先删除再插入)
+        if (emp.getExprList() != null && !emp.getExprList().isEmpty()) {
+            empExprMapper.deleteExprByEmpId(emp.getId());
+            for (EmpExpr empExpr : emp.getExprList()) {
+                empExpr.setEmpId(emp.getId());
+                empExprMapper.insertEmpExpr(empExpr);
+            }
+        }
         return Result.success();
     }
     
@@ -65,5 +74,10 @@ public class EmpServiceImpl implements EmpService {
     public Result deleteEmps(List<Integer> ids) {
         empMapper.deleteEmps(ids);
         return Result.success();
+    }
+
+    @Override
+    public Emp getEmpById(Integer id) {
+        return empMapper.getEmpById(id);
     }
 }

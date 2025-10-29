@@ -3,6 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tk.tliaswebmanagment.Mapper.EmpMapper">
+    <resultMap id="empResultMap" type="com.tk.tliaswebmanagment.pojo.Emp" autoMapping="true">
+        <id property="id" column="id"/>
+        <result property="deptName" column="dept_name"/>
+        <collection property="exprList" ofType="com.tk.tliaswebmanagment.pojo.EmpExpr" autoMapping="true">
+            <id property="id" column="expr_id"/>
+        </collection>
+    </resultMap>
 
     <!-- 动态查询员工列表 -->
     <select id="getEmpByPage" parameterType="com.tk.tliaswebmanagment.pojo.EmpQuerryParam" resultType="com.tk.tliaswebmanagment.pojo.Emp">
@@ -24,6 +31,35 @@
             </if>
         </where>
         ORDER BY e.update_time DESC
+    </select>
+
+        <!-- 根据id查询员工 -->
+    <select id="getEmpById" resultMap="empResultMap">
+        select
+            e.id,
+            e.username,
+            e.password,
+            e.name,
+            e.gender,
+            e.phone,
+            e.job,
+            e.salary,
+            e.image,
+            e.entry_date,
+            e.dept_id,
+            e.create_time,
+            e.update_time,
+            d.name as dept_name,
+            eexpr.id as expr_id,
+            eexpr.emp_id,
+            eexpr.begin,
+            eexpr.end,
+            eexpr.company,
+            eexpr.job
+        from emp e
+            left join dept d on e.dept_id = d.id
+            left join emp_expr eexpr on e.id = eexpr.emp_id
+        where e.id = #{id}
     </select>
 
 
