@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmpServiceImpl implements EmpService {
@@ -94,5 +95,20 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public List<Emp> getEmpList() {
         return empMapper.getEmpList();
+    }
+
+
+    // 获取员工岗位数据
+    @Override
+    public JobOption getEmpJobData() {
+        List<Map<String,Object>> list = empMapper.countEmpJobData();
+        List jobList = list.stream().map(map -> map.get("pos")).toList();
+        List numList = list.stream().map(map -> map.get("num")).toList();
+        return new JobOption(jobList, numList);
+    }
+
+    @Override
+    public List<Map<String, Object>> getEmpGenderData() {
+        return empMapper.countEmpGenderData();
     }
 }

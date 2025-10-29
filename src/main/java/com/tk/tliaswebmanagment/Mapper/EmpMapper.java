@@ -5,6 +5,7 @@ import com.tk.tliaswebmanagment.pojo.EmpQuerryParam;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface EmpMapper {
@@ -23,4 +24,10 @@ public interface EmpMapper {
     Emp getEmpById(Integer id);
 
     List<Emp> getEmpList();
+
+    @MapKey("pos")
+    List<Map<String, Object>> countEmpJobData();
+
+    @MapKey("name")
+    List<Map<String, Object>> countEmpGenderData();
 }

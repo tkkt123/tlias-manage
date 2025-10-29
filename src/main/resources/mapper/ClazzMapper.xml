@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tk.tliaswebmanagment.Mapper.ClazzMapper">
+    <select id="getClazzsPage" resultType="com.tk.tliaswebmanagment.pojo.Clazz">
+        select c.id,
+               c.name,
+               c.room,
+               c.begin_date,
+               c.end_date,
+               c.master_id,
+               c.subject,
+               c.create_time,
+               c.update_time,
+               e.name   as masterName,
+               (CASE
+                    WHEN (c.begin_date &gt; #{currentDate}) THEN N'未开班'
+                    WHEN (c.end_date &lt; #{currentDate}) THEN N'已结课'
+                    ELSE N'在读'
+                   END)
+                as status
+        from clazz c
+                 left join emp e on c.master_id = e.id
+    </select>
+</mapper>

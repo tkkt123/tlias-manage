@@ -17,23 +17,27 @@ public class EmpController {
     @Autowired
     private EmpService empService;
 
+    // 分页查询员工
     @GetMapping("/emps")
     public Result getEmpByPage(EmpQuerryParam empQuerryParam) {
         PageResult pageResult = empService.getEmpByPage(empQuerryParam);
        return Result.success(pageResult);
     }
-    
+
+    // 新增员工
     @PostMapping("/emps")
     public Result insertEmp(@RequestBody Emp emp) {
         System.out.println(emp.toString());
         return empService.insertEmp(emp);
     }
-    
+
+    // 更新指定的员工
     @PutMapping("/emps")
     public Result updateEmp(@RequestBody Emp emp) {
         return empService.updateEmp(emp);
     }
-    
+
+    // 删除指定的员工
     @DeleteMapping("/emps")
     public Result deleteEmps(@RequestBody(required = false) List<Integer> ids) {
         if (ids == null || ids.isEmpty()) {
@@ -42,6 +46,8 @@ public class EmpController {
         return empService.deleteEmps(ids);
     }
 
+
+    // 获取指定的员工
     @GetMapping("/emps/{id}")
     public Result getEmpById(@PathVariable Integer id) {
         Emp emp = empService.getEmpById(id);
