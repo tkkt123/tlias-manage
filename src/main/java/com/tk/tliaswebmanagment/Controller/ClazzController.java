@@ -5,10 +5,7 @@ import com.tk.tliaswebmanagment.pojo.Clazz;
 import com.tk.tliaswebmanagment.pojo.ClazzQueryParam;
 import com.tk.tliaswebmanagment.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -24,6 +21,20 @@ public class ClazzController {
     @PostMapping("/clazzs")
     public Result insertClazz(@RequestBody Clazz clazz) {
         return clazzService.insertClazz(clazz);
+    }
+
+    @GetMapping("/clazzs/{id}")
+    public Result getClazzById(@PathVariable Integer id) {
+        Clazz clazz = clazzService.getClazzById(id);
+        if (clazz == null) {
+            return Result.error("班级不存在");
+        }
+        return Result.success(clazz);
+    }
+
+    @PutMapping("/clazzs")
+    public Result updateClazz(@RequestBody Clazz clazz) {
+        return clazzService.updateClazz(clazz);
     }
 
 }

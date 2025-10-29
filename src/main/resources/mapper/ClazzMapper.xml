@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.tk.tliaswebmanagment.Mapper.ClazzMapper">
+    <update id="update">
+        update clazz
+        <set>
+            <if test="name != null and name != ''">
+            name = #{name},
+            </if>
+            <if test="room != null and room != ''">
+            room = #{room},
+            </if>
+            <if test="subject != null and subject != ''">
+            subject = #{subject},
+            </if>
+            <if test="masterId != null">
+            master_id = #{masterId},
+            </if>
+            <if test="beginDate != null">
+            begin_date = #{beginDate},
+            </if>
+            <if test="endDate != null">
+            end_date = #{endDate},
+            </if>
+            update_time = #{updateTime}
+        </set>
+        where id = #{id}
+    </update>
     <select id="getClazzsPage" resultType="com.tk.tliaswebmanagment.pojo.Clazz">
         select c.id,
         c.name,
