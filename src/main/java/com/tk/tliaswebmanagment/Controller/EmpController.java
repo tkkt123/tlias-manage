@@ -50,4 +50,11 @@ public class EmpController {
         }
         return Result.success(emp);
     }
+
+    // 获取所有员工
+    @GetMapping("/emps/list")
+    public Result getEmpList() {
+        List<Emp> empList = empService.getEmpList();
+        return Result.success(empList);
+    }
 }

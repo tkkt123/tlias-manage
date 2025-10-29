@@ -24,4 +24,6 @@ public interface EmpMapper {
     void deleteEmps(@Param("ids") List<Integer> ids);
 
     Emp getEmpById(Integer id);
+
+    List<Emp> getEmpList();
 }

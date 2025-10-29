@@ -41,10 +41,16 @@ public class EmpServiceImpl implements EmpService {
         empMapper.insertEmp(emp);
         // 插入员工工作经历
         if (emp.getExprList() != null && !emp.getExprList().isEmpty()) {
+//            循环插入
+//            for (EmpExpr empExpr : emp.getExprList()) {
+//                empExpr.setEmpId(emp.getId());
+//                empExprMapper.insertEmpExpr(empExpr);
+//            }
+//             批量插入
             for (EmpExpr empExpr : emp.getExprList()) {
                 empExpr.setEmpId(emp.getId());
-                empExprMapper.insertEmpExpr(empExpr);
             }
+            empExprMapper.insertBatch(emp.getExprList());
             return Result.success();
         }
         else{
@@ -64,20 +70,28 @@ public class EmpServiceImpl implements EmpService {
             empExprMapper.deleteExprByEmpId(emp.getId());
             for (EmpExpr empExpr : emp.getExprList()) {
                 empExpr.setEmpId(emp.getId());
-                empExprMapper.insertEmpExpr(empExpr);
             }
+            empExprMapper.insertBatch(emp.getExprList());
         }
         return Result.success();
     }
-    
+
+    @Transactional
     @Override
     public Result deleteEmps(List<Integer> ids) {
         empMapper.deleteEmps(ids);
+        // 删除员工工作经历
+        empExprMapper.deleteExprByEmpIds(ids);
         return Result.success();
     }
 
     @Override
     public Emp getEmpById(Integer id) {
         return empMapper.getEmpById(id);
+    }
+
+    @Override
+    public List<Emp> getEmpList() {
+        return empMapper.getEmpList();
     }
 }

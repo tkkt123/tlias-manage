@@ -17,4 +17,6 @@ public interface EmpService {
     Result deleteEmps(List<Integer> ids);
 
     Emp getEmpById(Integer id);
+
+    List<Emp> getEmpList();
 }
