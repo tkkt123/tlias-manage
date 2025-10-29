@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClazzServiceImpl implements ClazzService {
@@ -41,6 +42,20 @@ public class ClazzServiceImpl implements ClazzService {
     public Result updateClazz(Clazz clazz) {
         clazz.setUpdateTime(LocalDateTime.now());
         clazzMapper.update(clazz);
+        return Result.success();
+    }
+
+    @Transactional
+    @Override
+    public Result deleteClazz(Integer id) {
+        if (id == null) {
+            return Result.error("请选择要删除的班级");
+        }
+        long count = clazzMapper.countClazzStudent(id);
+        if (count > 0) {
+            return Result.error("对不起, 该班级下有学生, 不能直接删除");
+        }
+        clazzMapper.delete(id);
         return Result.success();
     }
 }

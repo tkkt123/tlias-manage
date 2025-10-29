@@ -15,4 +15,6 @@ public interface ClazzService {
     Clazz getClazzById(Integer id);
 
     Result updateClazz(Clazz clazz);
+
+    Result deleteClazz(Integer id);
 }

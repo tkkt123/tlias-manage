@@ -37,4 +37,11 @@ public class ClazzController {
         return clazzService.updateClazz(clazz);
     }
 
+    @DeleteMapping("/clazzs/{id}")
+    public Result deleteClazzs(@PathVariable(required = true) Integer id) {
+        if (id == null) {
+            return Result.error("请选择要删除的班级");
+        }
+        return clazzService.deleteClazz(id);
+    }
 }

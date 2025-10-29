@@ -19,4 +19,10 @@ public interface ClazzMapper {
     Clazz selectById(Integer id);
 
     void update(Clazz clazz);
+
+    @Delete("delete from clazz where id = #{id}")
+    void delete(Integer id);
+
+    @Select("select count(*) from student where clazz_id = #{id}")
+    long countClazzStudent(Integer id);
 }
