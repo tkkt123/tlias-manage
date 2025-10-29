@@ -4,6 +4,8 @@ import com.tk.tliaswebmanagment.pojo.PageResult;
 import com.tk.tliaswebmanagment.pojo.Student;
 import com.tk.tliaswebmanagment.pojo.StudentQuerryParam;
 
+import java.util.List;
+
 public interface StudentService {
 
     PageResult getStudentsPage(StudentQuerryParam studentQuerryParam);
@@ -13,4 +15,6 @@ public interface StudentService {
     Student getStudentById(int id);
 
     void updateStudent(Student student);
+
+    void deleteStudents(List<Integer> ids);
 }

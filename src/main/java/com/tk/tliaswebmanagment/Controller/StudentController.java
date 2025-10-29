@@ -37,4 +37,10 @@ public class StudentController {
         studentService.updateStudent(student);
         return Result.success();
     }
+
+    @DeleteMapping("/students/{ids}")
+    public Result deleteStudent(@PathVariable List<Integer> ids) {
+        studentService.deleteStudents(ids);
+        return Result.success();
+    }
 }

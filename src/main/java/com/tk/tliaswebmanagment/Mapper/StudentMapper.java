@@ -21,4 +21,6 @@ public interface StudentMapper {
     Student selectById(int id);
 
     void updateById(Student student);
+
+    void deleteBatchIds(List<Integer> ids);
 }

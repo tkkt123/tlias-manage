@@ -44,6 +44,12 @@
         </set>
         where id=#{id}
     </update>
+    <delete id="deleteBatchIds">
+        delete from student where id in
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 
     <select id="selectPage" resultType="com.tk.tliaswebmanagment.pojo.Student">
         select
