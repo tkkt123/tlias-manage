@@ -21,7 +21,11 @@ aliyun:
     endpoint: https://oss-cn-beijing.aliyuncs.com
     bucketName: yun-bucket-test
     region: cn-beijing
-
+minio:
+  endpoint: http://raspberrypi.tail703721.ts.net:19000
+  access-key: minioadmin
+  secret-key: minioadmin
+  bucket-name: tlias
 logging:
   level:
     org.springframework.jdbc.support.JdbcTransactionManager: debug

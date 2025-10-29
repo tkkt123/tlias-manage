@@ -18,7 +18,7 @@ public class UploadController {
 
     @RequestMapping("/file")
     public Result uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
-        String url=ossOperator.uploadFile(Objects.requireNonNull(file.getOriginalFilename()), file.getBytes());
+        String url=ossOperator.uploadFile(file);
         return Result.success(url);
     }
 }

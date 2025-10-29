@@ -1,52 +1,78 @@
 package com.tk.tliaswebmanagment.utils;
 
-import com.aliyun.oss.ClientBuilderConfiguration;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.common.auth.EnvironmentVariableCredentialsProvider;
-import com.aliyun.oss.common.comm.SignVersion;
+import com.tk.tliaswebmanagment.minio.minioPropertise;
+import io.minio.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.UUID;
 
 @Component
 public class AliyunOSSOperator {
 
     @Autowired
-    AliyunOSSPropertise aliyunOSSPropertise;
+    private MinioClient minioClient;
+    @Autowired
+    private minioPropertise minioPropertise;
 
-    public String uploadFile(String fileName,byte[] content) throws Exception {
-        EnvironmentVariableCredentialsProvider credentialsProvider = new EnvironmentVariableCredentialsProvider();
-
-        String dir= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-        String newfileName= UUID.randomUUID()+fileName.substring(fileName.lastIndexOf("."));
-        String objectName= dir+"/"+newfileName;
-
-
-        // 创建 ClientBuilderConfiguration 实例，用于配置 OSS 客户端参数
-        ClientBuilderConfiguration clientBuilderConfiguration = new ClientBuilderConfiguration();
-        // 设置签名算法版本为 V4
-        clientBuilderConfiguration.setSignatureVersion(SignVersion.V4);
-
-        // 创建 OSS 客户端实例
-        OSS ossClient = OSSClientBuilder.create()
-                .endpoint(aliyunOSSPropertise.getEndpoint())
-                .credentialsProvider(credentialsProvider)
-                .clientConfiguration(clientBuilderConfiguration)
-                .region(aliyunOSSPropertise.getRegion())
-                .build();
-        try {
-            ossClient.putObject(aliyunOSSPropertise.getBucketName(),objectName,new ByteArrayInputStream(content));
-        } finally {
-            // 当OSSClient实例不再使用时，调用shutdown方法以释放资源
-            ossClient.shutdown();
+    public String uploadFile(MultipartFile file) throws Exception {
+        boolean flag=minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioPropertise.getBucketName()).build());
+        if(!flag){
+            minioClient.makeBucket(
+                    MakeBucketArgs.builder()
+                            .bucket(minioPropertise.getBucketName())
+                            .build()
+            );
+            minioClient.setBucketPolicy(
+                    SetBucketPolicyArgs.builder()
+                            .bucket(minioPropertise.getBucketName())
+                            .config(createBuketPolicyConfig(minioPropertise.getBucketName()))
+                            .build()
+            );
         }
 
-        return aliyunOSSPropertise.getEndpoint().split("//")+"//"+aliyunOSSPropertise.getBucketName()+"."+aliyunOSSPropertise.getEndpoint().split("//") +objectName;
+        String filename = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date())
+                + "/"
+                + UUID.randomUUID()
+                + "-"
+                + file.getOriginalFilename();
+        minioClient.putObject(PutObjectArgs.builder()
+                .bucket(minioPropertise.getBucketName())
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .object(filename)
+                .contentType(file.getContentType())
+                .build());
+        return String.join("/", minioPropertise.getEndpoint(),minioPropertise.getBucketName(),  filename);
     }
+
+    private String createBuketPolicyConfig(String bucketName){
+        return """
+                {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "AWS": [
+                                    "*"
+                                ]
+                            },
+                            "Action": [
+                                "s3:GetObject"
+                            ],
+                            "Resource": [
+                                "arn:aws:s3:::%s/*",
+                            ]
+                        }
+                    ]
+                }
+                """.formatted(bucketName);
+    }
+
 }
