@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClazzQueryParam {
-    private Integer name;
+    private String name;
     private LocalDate begin;
     private LocalDate end;
     private Integer page;

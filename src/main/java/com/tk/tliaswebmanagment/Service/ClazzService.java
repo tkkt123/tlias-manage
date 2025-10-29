@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 public interface ClazzService {
-    List<Clazz> getClazzsPage(ClazzQueryParam clazzQuerryParam);
+    List<Clazz> getClazzsPage(ClazzQueryParam clazzQueryParam);
 }

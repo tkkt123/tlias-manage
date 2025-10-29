@@ -15,9 +15,9 @@ public class ClazzController {
     ClazzService clazzService;
 
     @GetMapping("/clazzs")
-    public Result getClazzsPage(ClazzQueryParam clazzQuerryParam) {
-        return Result.success(clazzService.getClazzsPage(clazzQuerryParam));
+    public Result getClazzsPage(ClazzQueryParam clazzQueryParam) {
+        System.out.println(clazzQueryParam);
+        return Result.success(clazzService.getClazzsPage(clazzQueryParam));
     }
-
 
 }

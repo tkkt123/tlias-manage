@@ -11,7 +11,7 @@
                c.subject,
                c.create_time,
                c.update_time,
-               e.name   as masterName,
+               e.name as master_name,
                (CASE
                     WHEN (c.begin_date &gt; #{currentDate}) THEN N'未开班'
                     WHEN (c.end_date &lt; #{currentDate}) THEN N'已结课'
@@ -20,5 +20,16 @@
                 as status
         from clazz c
                  left join emp e on c.master_id = e.id
+        <where>
+            <if test="clazzQueryParam.name != null and clazzQueryParam.name != ''" >
+                and c.name like concat('%', #{clazzQueryParam.name}, '%')
+            </if>
+            <if test="clazzQueryParam.begin != null">
+                and c.begin_date &gt;= #{clazzQueryParam.begin}
+            </if>
+            <if test="clazzQueryParam.end != null">
+                and c.end_date &lt;= #{clazzQueryParam.end}
+            </if>
+        </where>
     </select>
 </mapper>

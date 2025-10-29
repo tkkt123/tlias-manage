@@ -17,8 +17,9 @@ public class ClazzServiceImpl implements ClazzService {
     ClazzMapper clazzMapper;
 
     @Override
-    public List<Clazz> getClazzsPage(ClazzQueryParam clazzQuerryParam) {
-        PageHelper.startPage(clazzQuerryParam.getPage(), clazzQuerryParam.getPageSize());
-        return clazzMapper.getClazzsPage(clazzQuerryParam, LocalDate.now());
+    public List<Clazz> getClazzsPage(ClazzQueryParam clazzQueryParam) {
+        PageHelper.startPage(clazzQueryParam.getPage(), clazzQueryParam.getPageSize());
+        System.out.println(clazzQueryParam);
+        return clazzMapper.getClazzsPage(clazzQueryParam, LocalDate.now());
     }
 }
