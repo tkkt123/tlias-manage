@@ -3,9 +3,12 @@ package com.tk.tliaswebmanagment.Controller;
 import com.tk.tliaswebmanagment.Service.ClazzService;
 import com.tk.tliaswebmanagment.pojo.Clazz;
 import com.tk.tliaswebmanagment.pojo.ClazzQueryParam;
+import com.tk.tliaswebmanagment.pojo.PageResult;
 import com.tk.tliaswebmanagment.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -15,7 +18,8 @@ public class ClazzController {
 
     @GetMapping("/clazzs")
     public Result getClazzsPage(ClazzQueryParam clazzQueryParam) {
-        return Result.success(clazzService.getClazzsPage(clazzQueryParam));
+        PageResult pageResult = clazzService.getClazzsPage(clazzQueryParam);
+        return Result.success(pageResult);
     }
 
     @PostMapping("/clazzs")
@@ -43,5 +47,11 @@ public class ClazzController {
             return Result.error("请选择要删除的班级");
         }
         return clazzService.deleteClazz(id);
+    }
+
+    @GetMapping("/clazzs/list")
+    public Result getClazzsList() {
+        List<Clazz> clazzsList = clazzService.getClazzsList();
+        return Result.success(clazzsList);
     }
 }

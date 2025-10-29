@@ -1,10 +1,12 @@
 package com.tk.tliaswebmanagment.Service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.tk.tliaswebmanagment.Mapper.ClazzMapper;
 import com.tk.tliaswebmanagment.Service.ClazzService;
 import com.tk.tliaswebmanagment.pojo.Clazz;
 import com.tk.tliaswebmanagment.pojo.ClazzQueryParam;
+import com.tk.tliaswebmanagment.pojo.PageResult;
 import com.tk.tliaswebmanagment.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,9 +22,11 @@ public class ClazzServiceImpl implements ClazzService {
     ClazzMapper clazzMapper;
 
     @Override
-    public List<Clazz> getClazzsPage(ClazzQueryParam clazzQueryParam) {
+    public PageResult getClazzsPage(ClazzQueryParam clazzQueryParam) {
         PageHelper.startPage(clazzQueryParam.getPage(), clazzQueryParam.getPageSize());
-        return clazzMapper.getClazzsPage(clazzQueryParam, LocalDate.now());
+        List<Clazz> clazzs = clazzMapper.getClazzsPage(clazzQueryParam, LocalDate.now());
+        Page<Clazz> p=(Page<Clazz>)clazzs;
+        return new PageResult(p.getTotal(), p.getResult());
     }
 
     @Override
@@ -57,5 +61,10 @@ public class ClazzServiceImpl implements ClazzService {
         }
         clazzMapper.delete(id);
         return Result.success();
+    }
+
+    @Override
+    public List<Clazz> getClazzsList() {
+        return clazzMapper.getClazzsList();
     }
 }

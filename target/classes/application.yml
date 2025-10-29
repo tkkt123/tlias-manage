@@ -29,3 +29,7 @@ minio:
 logging:
   level:
     org.springframework.jdbc.support.JdbcTransactionManager: debug
+    com.tk.tliaswebmanagment.Mapper: debug
+    com.tk.tliaswebmanagment.Service.impl.ClazzServiceImpl: debug
+    com.tk.tliaswebmanagment.Controller.ClazzController: debug
+    org.apache.ibatis: debug
