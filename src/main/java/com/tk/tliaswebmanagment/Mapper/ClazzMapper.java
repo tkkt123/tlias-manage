@@ -2,6 +2,7 @@ package com.tk.tliaswebmanagment.Mapper;
 
 import com.tk.tliaswebmanagment.pojo.Clazz;
 import com.tk.tliaswebmanagment.pojo.ClazzQueryParam;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,4 +12,8 @@ import java.util.List;
 @Mapper
 public interface ClazzMapper {
     List<Clazz> getClazzsPage(@Param("clazzQueryParam") ClazzQueryParam clazzQueryParam, @Param("currentDate") LocalDate currentDate);
+
+    @Insert("insert into clazz (name, room, subject, master_id, begin_date, end_date, create_time, update_time) " +
+            "values (#{name}, #{room}, #{subject}, #{masterId}, #{beginDate}, #{endDate}, #{createTime}, #{updateTime})")
+    void insert(Clazz clazz);
 }

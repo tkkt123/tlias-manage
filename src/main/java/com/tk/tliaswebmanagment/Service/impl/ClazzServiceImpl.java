@@ -5,9 +5,11 @@ import com.tk.tliaswebmanagment.Mapper.ClazzMapper;
 import com.tk.tliaswebmanagment.Service.ClazzService;
 import com.tk.tliaswebmanagment.pojo.Clazz;
 import com.tk.tliaswebmanagment.pojo.ClazzQueryParam;
+import com.tk.tliaswebmanagment.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,14 @@ public class ClazzServiceImpl implements ClazzService {
     @Override
     public List<Clazz> getClazzsPage(ClazzQueryParam clazzQueryParam) {
         PageHelper.startPage(clazzQueryParam.getPage(), clazzQueryParam.getPageSize());
-        System.out.println(clazzQueryParam);
         return clazzMapper.getClazzsPage(clazzQueryParam, LocalDate.now());
+    }
+
+    @Override
+    public Result insertClazz(Clazz clazz) {
+        clazz.setCreateTime(LocalDateTime.now());
+        clazz.setUpdateTime(LocalDateTime.now());
+        clazzMapper.insert(clazz);
+        return Result.success();
     }
 }
