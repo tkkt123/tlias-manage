@@ -2,10 +2,7 @@ package com.tk.tliaswebmanagment.Mapper;
 
 import com.tk.tliaswebmanagment.pojo.Emp;
 import com.tk.tliaswebmanagment.pojo.EmpQuerryParam;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -25,5 +22,6 @@ public interface EmpMapper {
 
     Emp getEmpById(Integer id);
 
+    @Select("SELECT * FROM emp")
     List<Emp> getEmpList();
 }
