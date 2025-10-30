@@ -6,6 +6,7 @@ import com.tk.tliaswebmanagment.Mapper.StudentMapper;
 import com.tk.tliaswebmanagment.Service.StudentService;
 import com.tk.tliaswebmanagment.pojo.PageResult;
 import com.tk.tliaswebmanagment.pojo.Student;
+import com.tk.tliaswebmanagment.pojo.StudentOption;
 import com.tk.tliaswebmanagment.pojo.StudentQuerryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -51,5 +53,23 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudents(List<Integer> ids) {
         studentMapper.deleteBatchIds(ids);
+    }
+
+    @Override
+    public void updateViolationScore(int id, int score) {
+        studentMapper.updateViolationScore(id, score);
+    }
+
+    @Override
+    public StudentOption getStudentCountData() {
+        List<Map<String,Object>> list = studentMapper.getStudentCountData();
+        List clazzList = list.stream().map(map -> map.get("clazz_name")).toList();
+        List numList = list.stream().map(map -> map.get("num")).toList();
+        return new StudentOption(clazzList, numList);
+    }
+
+    @Override
+    public List<Map<String, Object>> getStudentDegreeData() {
+        return studentMapper.getStudentDegreeData();
     }
 }

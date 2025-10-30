@@ -43,4 +43,10 @@ public class StudentController {
         studentService.deleteStudents(ids);
         return Result.success();
     }
+
+    @PutMapping("/students/violation/{id}/{score}")
+    public Result updateViolationScore(@PathVariable int id, @PathVariable int score) {
+        studentService.updateViolationScore(id, score);
+        return Result.success();
+    }
 }

@@ -44,6 +44,12 @@
         </set>
         where id=#{id}
     </update>
+    <update id="updateViolationScore">
+        update student
+        set violation_score=violation_score+#{score},
+            violation_count=violation_count+1
+        where id=#{id}
+    </update>
     <delete id="deleteBatchIds">
         delete from student where id in
         <foreach collection="ids" item="id" open="(" close=")" separator=",">
@@ -81,5 +87,28 @@
                 and s.clazz_id = #{clazzId}
             </if>
         </where>
+    </select>
+    <select id="getStudentCountData" resultType="java.util.Map">
+        select
+            c.name as clazz_name,
+            count(s.id) as num
+        from student s left join clazz c on s.clazz_id = c.id
+        group by c.name
+    </select>
+    <select id="getStudentDegreeData" resultType="java.util.Map">
+        select
+            (case s.degree
+                when 1 then '初中'
+                when 2 then '高中'
+                when 3 then '大专'
+                when 4 then '本科'
+                when 5 then '硕士'
+                when 6 then '博士'
+                else '其他'
+            end) as name,
+            count(s.id) as value
+        from student s
+        group by degree
+        order by degree
     </select>
 </mapper>
