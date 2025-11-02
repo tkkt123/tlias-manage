@@ -6,6 +6,7 @@ import com.tk.tliaswebmanagment.Mapper.EmpExprMapper;
 import com.tk.tliaswebmanagment.Mapper.EmpMapper;
 import com.tk.tliaswebmanagment.Service.EmpService;
 import com.tk.tliaswebmanagment.pojo.*;
+import com.tk.tliaswebmanagment.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,5 +111,16 @@ public class EmpServiceImpl implements EmpService {
     @Override
     public List<Map<String, Object>> getEmpGenderData() {
         return empMapper.countEmpGenderData();
+    }
+
+    @Override
+    public LoginInfo login(Emp emp) {
+        LoginInfo info = empMapper.selectByUsernameAndPassword(emp);
+        if(info!=null){
+            String token= JwtUtils.createToken(info.getId(),info.getUsername());
+            info.setToken(token);
+            return info;
+        }
+        return null;
     }
 }

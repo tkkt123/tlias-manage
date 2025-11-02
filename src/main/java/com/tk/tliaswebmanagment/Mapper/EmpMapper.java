@@ -2,6 +2,7 @@ package com.tk.tliaswebmanagment.Mapper;
 
 import com.tk.tliaswebmanagment.pojo.Emp;
 import com.tk.tliaswebmanagment.pojo.EmpQuerryParam;
+import com.tk.tliaswebmanagment.pojo.LoginInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -30,4 +31,7 @@ public interface EmpMapper {
 
     @MapKey("name")
     List<Map<String, Object>> countEmpGenderData();
+
+    @Select("SELECT * FROM emp WHERE username = #{username} AND (password = #{password} OR password is null)")
+    LoginInfo selectByUsernameAndPassword(Emp emp);
 }

@@ -30,7 +30,7 @@ public class Result {
     public static Result error(String message){
         Result result = new Result();
         result.setCode(0);
-        result.setMsg("error");
+        result.setMsg(message);
         return result;
     }
 

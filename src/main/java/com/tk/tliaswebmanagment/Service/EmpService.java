@@ -21,4 +21,6 @@ public interface EmpService {
     JobOption getEmpJobData();
 
     List<Map<String, Object>> getEmpGenderData();
+
+    LoginInfo login(Emp emp);
 }

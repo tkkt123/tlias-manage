@@ -1,20 +1,18 @@
 package com.tk.tliaswebmanagment.Controller;
 
 import com.tk.tliaswebmanagment.pojo.Result;
-import com.tk.tliaswebmanagment.utils.AliyunOSSOperator;
+import com.tk.tliaswebmanagment.utils.MinioOSSOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Objects;
-
 
 @RestController
 public class UploadController {
     @Autowired
-    AliyunOSSOperator ossOperator;
+    MinioOSSOperator ossOperator;
 
     @RequestMapping("/file")
     public Result uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
