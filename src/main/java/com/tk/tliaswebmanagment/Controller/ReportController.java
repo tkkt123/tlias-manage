@@ -1,13 +1,13 @@
 package com.tk.tliaswebmanagment.Controller;
 
 import com.tk.tliaswebmanagment.Service.EmpService;
+import com.tk.tliaswebmanagment.Service.OperateLogService;
 import com.tk.tliaswebmanagment.Service.StudentService;
-import com.tk.tliaswebmanagment.pojo.JobOption;
-import com.tk.tliaswebmanagment.pojo.Result;
-import com.tk.tliaswebmanagment.pojo.StudentOption;
+import com.tk.tliaswebmanagment.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,6 +19,8 @@ public class ReportController {
     private EmpService empService;
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private OperateLogService operateLogService;
 
 
 
@@ -46,6 +48,11 @@ public class ReportController {
         return Result.success(studentDegreeData);
     }
 
+    @GetMapping("/log/page")
+    public Result getLogPage(@RequestParam Integer page, @RequestParam Integer size) {
+        PageResult res=operateLogService.selectLogsPage(page,size);
+        return Result.success(res);
+    }
 
 
 }

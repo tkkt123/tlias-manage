@@ -3,6 +3,9 @@ package com.tk.tliaswebmanagment.Mapper;
 import com.tk.tliaswebmanagment.pojo.OperateLog;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface OperateLogMapper {
@@ -12,4 +15,6 @@ public interface OperateLogMapper {
             "values (#{operateEmpId}, #{operateTime}, #{className}, #{methodName}, #{methodParams}, #{returnValue}, #{costTime});")
     public void insert(OperateLog log);
 
+    @Select("select * from operate_log order by operate_time desc ")
+    List<OperateLog> selectPage();
 }
