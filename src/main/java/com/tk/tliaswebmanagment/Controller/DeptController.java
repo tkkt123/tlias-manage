@@ -1,6 +1,7 @@
 package com.tk.tliaswebmanagment.Controller;
 
 import com.tk.tliaswebmanagment.Service.DeptService;
+import com.tk.tliaswebmanagment.anno.Log;
 import com.tk.tliaswebmanagment.pojo.Dept;
 import com.tk.tliaswebmanagment.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class DeptController {
     }
 
     //部门删除
+    @Log
     @DeleteMapping("/depts")
     public Result deleteDept(@RequestParam("id")Integer id) {
         deptService.deleteDept(id);
@@ -29,6 +31,7 @@ public class DeptController {
     }
 
     //部门添加
+    @Log
     @PostMapping("/depts")
     public Result insertDept(@RequestBody Dept dept) {
         System.out.println(dept);
@@ -37,6 +40,7 @@ public class DeptController {
     }
 
     //部门修改
+    @Log
     @PutMapping("/depts")
     public Result updateDept(@RequestBody Dept dept){
         deptService.updateDept(dept);

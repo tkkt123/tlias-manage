@@ -1,5 +1,6 @@
 package com.tk.tliaswebmanagment.Controller;
 
+import com.tk.tliaswebmanagment.anno.Log;
 import com.tk.tliaswebmanagment.pojo.Result;
 import com.tk.tliaswebmanagment.utils.MinioOSSOperator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class UploadController {
     @Autowired
     MinioOSSOperator ossOperator;
 
+    @Log
     @RequestMapping("/file")
     public Result uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         String url=ossOperator.uploadFile(file);

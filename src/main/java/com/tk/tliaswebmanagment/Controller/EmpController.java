@@ -1,6 +1,7 @@
 package com.tk.tliaswebmanagment.Controller;
 
 import com.tk.tliaswebmanagment.Service.EmpService;
+import com.tk.tliaswebmanagment.anno.Log;
 import com.tk.tliaswebmanagment.pojo.Emp;
 import com.tk.tliaswebmanagment.pojo.EmpQuerryParam;
 import com.tk.tliaswebmanagment.pojo.PageResult;
@@ -25,6 +26,7 @@ public class EmpController {
     }
 
     // 新增员工
+    @Log
     @PostMapping("/emps")
     public Result insertEmp(@RequestBody Emp emp) {
         System.out.println(emp.toString());
@@ -32,12 +34,14 @@ public class EmpController {
     }
 
     // 更新指定的员工
+    @Log
     @PutMapping("/emps")
     public Result updateEmp(@RequestBody Emp emp) {
         return empService.updateEmp(emp);
     }
 
     // 删除指定的员工
+    @Log
     @DeleteMapping("/emps")
     public Result deleteEmps(@RequestBody(required = false) List<Integer> ids) {
         if (ids == null || ids.isEmpty()) {

@@ -1,6 +1,7 @@
 package com.tk.tliaswebmanagment.Controller;
 
 import com.tk.tliaswebmanagment.Service.ClazzService;
+import com.tk.tliaswebmanagment.anno.Log;
 import com.tk.tliaswebmanagment.pojo.Clazz;
 import com.tk.tliaswebmanagment.pojo.ClazzQueryParam;
 import com.tk.tliaswebmanagment.pojo.PageResult;
@@ -22,6 +23,7 @@ public class ClazzController {
         return Result.success(pageResult);
     }
 
+    @Log
     @PostMapping("/clazzs")
     public Result insertClazz(@RequestBody Clazz clazz) {
         return clazzService.insertClazz(clazz);
@@ -36,11 +38,13 @@ public class ClazzController {
         return Result.success(clazz);
     }
 
+    @Log
     @PutMapping("/clazzs")
     public Result updateClazz(@RequestBody Clazz clazz) {
         return clazzService.updateClazz(clazz);
     }
 
+    @Log
     @DeleteMapping("/clazzs/{id}")
     public Result deleteClazzs(@PathVariable(required = true) Integer id) {
         if (id == null) {

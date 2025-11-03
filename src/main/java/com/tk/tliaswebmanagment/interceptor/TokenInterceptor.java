@@ -1,5 +1,6 @@
 package com.tk.tliaswebmanagment.interceptor;
 
+import com.tk.tliaswebmanagment.utils.CurrentHolder;
 import com.tk.tliaswebmanagment.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +32,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         Claims claims = null;
         try {
             claims = JwtUtils.parseToken(token);
+
+            Integer userId=Integer.parseInt(claims.get("id").toString());
+            CurrentHolder.setCurrentId(userId);
+
         } catch (Exception e){
             log.info("token非法");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);//401未授权
@@ -51,6 +56,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     //视图渲染之后运行，一般没用
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        CurrentHolder.remove();
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
     }
 }

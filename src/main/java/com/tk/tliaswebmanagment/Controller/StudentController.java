@@ -2,6 +2,7 @@ package com.tk.tliaswebmanagment.Controller;
 
 import com.tk.tliaswebmanagment.Service.ClazzService;
 import com.tk.tliaswebmanagment.Service.StudentService;
+import com.tk.tliaswebmanagment.anno.Log;
 import com.tk.tliaswebmanagment.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ public class StudentController {
         return Result.success(pageResult);
     }
 
+    @Log
     @PostMapping("/students")
     public Result insertStudent(Student student) {
         studentService.insertStudent(student);
@@ -32,12 +34,14 @@ public class StudentController {
         return Result.success(student);
     }
 
+    @Log
     @PutMapping("/students")
     public Result updateStudent(Student student) {
         studentService.updateStudent(student);
         return Result.success();
     }
 
+    @Log
     @DeleteMapping("/students/{ids}")
     public Result deleteStudent(@PathVariable List<Integer> ids) {
         studentService.deleteStudents(ids);
