@@ -12,7 +12,7 @@ public interface ClazzMapper {
     List<Clazz> getClazzsPage(@Param("clazzQueryParam") ClazzQueryParam clazzQueryParam, @Param("currentDate") LocalDate currentDate);
 
     @Insert("insert into clazz (name, room, subject, master_id, begin_date, end_date, create_time, update_time) " +
-            "values (#{name}, #{room}, #{subject}, #{masterId}, #{beginDate}, #{endDate}, #{createTime}, #{updateTime})")
+            "values (#{name}, #{room}, #{subject}, #{masterId}, #{beginDate}, #{endDate}, #{createTime}, #{updateTime}) ")
     void insert(Clazz clazz);
 
     @Select("select * from clazz where id = #{id}")

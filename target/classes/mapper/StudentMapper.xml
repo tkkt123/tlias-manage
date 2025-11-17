@@ -87,6 +87,7 @@
                 and s.clazz_id = #{clazzId}
             </if>
         </where>
+        order by update_time desc
     </select>
     <select id="getStudentCountData" resultType="java.util.Map">
         select

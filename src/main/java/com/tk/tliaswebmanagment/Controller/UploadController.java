@@ -12,11 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class UploadController {
+
     @Autowired
     MinioOSSOperator ossOperator;
 
     @Log
-    @RequestMapping("/file")
+    @RequestMapping("/upload")
     public Result uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
         String url=ossOperator.uploadFile(file);
         return Result.success(url);

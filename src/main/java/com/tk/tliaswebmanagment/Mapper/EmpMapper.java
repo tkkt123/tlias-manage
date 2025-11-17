@@ -34,4 +34,10 @@ public interface EmpMapper {
 
     @Select("SELECT * FROM emp WHERE username = #{username} AND (password = #{password} OR password is null)")
     LoginInfo selectByUsernameAndPassword(Emp emp);
+
+    @Select("select password from emp where id = #{id}")
+    String getPasswd(Emp emp);
+
+    @Update("update emp set password = #{password} where id=#{id}")
+    void changePasswd(Emp emp);
 }

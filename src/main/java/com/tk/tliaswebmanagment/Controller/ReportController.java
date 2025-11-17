@@ -49,8 +49,8 @@ public class ReportController {
     }
 
     @GetMapping("/log/page")
-    public Result getLogPage(@RequestParam Integer page, @RequestParam Integer size) {
-        PageResult res=operateLogService.selectLogsPage(page,size);
+    public Result getLogPage(@RequestParam Integer page, @RequestParam Integer pageSize) {
+        PageResult res=operateLogService.selectLogsPage(page,pageSize);
         return Result.success(res);
     }
 

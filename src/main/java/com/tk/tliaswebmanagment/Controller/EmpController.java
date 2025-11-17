@@ -21,6 +21,7 @@ public class EmpController {
     // 分页查询员工
     @GetMapping("/emps")
     public Result getEmpByPage(EmpQuerryParam empQuerryParam) {
+        System.out.println(empQuerryParam);
         PageResult pageResult = empService.getEmpByPage(empQuerryParam);
        return Result.success(pageResult);
     }
@@ -43,7 +44,7 @@ public class EmpController {
     // 删除指定的员工
     @Log
     @DeleteMapping("/emps")
-    public Result deleteEmps(@RequestBody(required = false) List<Integer> ids) {
+    public Result deleteEmps(@RequestParam(required = false) List<Integer> ids) {
         if (ids == null || ids.isEmpty()) {
             return Result.error("请选择要删除的员工");
         }

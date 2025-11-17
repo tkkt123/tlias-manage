@@ -56,5 +56,6 @@
                 and c.end_date &lt;= #{clazzQueryParam.end}
             </if>
         </where>
+        order by update_time desc
     </select>
 </mapper>

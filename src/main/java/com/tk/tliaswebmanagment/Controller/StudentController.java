@@ -4,14 +4,19 @@ import com.tk.tliaswebmanagment.Service.ClazzService;
 import com.tk.tliaswebmanagment.Service.StudentService;
 import com.tk.tliaswebmanagment.anno.Log;
 import com.tk.tliaswebmanagment.pojo.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class StudentController {
+    private static final Logger log = LoggerFactory.getLogger(StudentController.class);
     @Autowired
     private StudentService studentService;
 
@@ -23,7 +28,8 @@ public class StudentController {
 
     @Log
     @PostMapping("/students")
-    public Result insertStudent(Student student) {
+    public Result insertStudent(@RequestBody Student student) {
+        System.out.println(student);
         studentService.insertStudent(student);
         return Result.success();
     }
@@ -36,15 +42,18 @@ public class StudentController {
 
     @Log
     @PutMapping("/students")
-    public Result updateStudent(Student student) {
+    public Result updateStudent(@RequestBody Student student) {
         studentService.updateStudent(student);
         return Result.success();
     }
 
     @Log
     @DeleteMapping("/students/{ids}")
-    public Result deleteStudent(@PathVariable List<Integer> ids) {
-        studentService.deleteStudents(ids);
+    public Result deleteStudent(@PathVariable String ids) {
+        List<Integer> idList = Arrays.stream(ids.split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
+        studentService.deleteStudents(idList);
         return Result.success();
     }
 

@@ -1,6 +1,6 @@
 package com.tk.tliaswebmanagment.utils;
 
-import com.tk.tliaswebmanagment.minio.minioPropertise;
+import com.tk.tliaswebmanagment.minio.minioProperties;
 import io.minio.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,24 +12,23 @@ import java.util.UUID;
 
 @Component
 public class MinioOSSOperator {
-
     @Autowired
     private MinioClient minioClient;
     @Autowired
-    private minioPropertise minioPropertise;
+    private minioProperties minioProperties;
 
     public String uploadFile(MultipartFile file) throws Exception {
-        boolean flag=minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioPropertise.getBucketName()).build());
+        boolean flag=minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucketName()).build());
         if(!flag){
             minioClient.makeBucket(
                     MakeBucketArgs.builder()
-                            .bucket(minioPropertise.getBucketName())
+                            .bucket(minioProperties.getBucketName())
                             .build()
             );
             minioClient.setBucketPolicy(
                     SetBucketPolicyArgs.builder()
-                            .bucket(minioPropertise.getBucketName())
-                            .config(createBuketPolicyConfig(minioPropertise.getBucketName()))
+                            .bucket(minioProperties.getBucketName())
+                            .config(createBuketPolicyConfig(minioProperties.getBucketName()))
                             .build()
             );
         }
@@ -40,12 +39,12 @@ public class MinioOSSOperator {
                 + "-"
                 + file.getOriginalFilename();
         minioClient.putObject(PutObjectArgs.builder()
-                .bucket(minioPropertise.getBucketName())
+                .bucket(minioProperties.getBucketName())
                 .stream(file.getInputStream(), file.getSize(), -1)
                 .object(filename)
                 .contentType(file.getContentType())
                 .build());
-        return String.join("/", minioPropertise.getEndpoint(),minioPropertise.getBucketName(),  filename);
+        return String.join("/", minioProperties.getEndpoint(), minioProperties.getBucketName(),  filename);
     }
 
     private String createBuketPolicyConfig(String bucketName){

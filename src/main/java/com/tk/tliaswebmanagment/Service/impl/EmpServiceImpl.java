@@ -123,4 +123,18 @@ public class EmpServiceImpl implements EmpService {
         }
         return null;
     }
+
+    @Override
+    public Result change(Emp emp) {
+        if(emp.getId()==null)return Result.error("未找到该用户");
+        if(emp.getPassword()==null||emp.getPassword().equals(""))return Result.error("没有设置新密码");
+        String oldPasswd=empMapper.getPasswd(emp);
+        System.out.println(oldPasswd);
+        System.out.println(emp.getPassword());
+        if(emp.getPassword().equals(oldPasswd))return Result.error("新密码不能和旧密码一样");
+
+        empMapper.changePasswd(emp);
+
+        return Result.success();
+    }
 }

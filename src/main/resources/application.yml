@@ -2,7 +2,7 @@ spring:
   application:
     name: tlias-web-managment
   datasource:
-    url: jdbc:mysql://localhost:3306/tlias
+    url: jdbc:mysql://192.168.116.102:3306/tlias
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: 123456

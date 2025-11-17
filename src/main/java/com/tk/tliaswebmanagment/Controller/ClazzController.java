@@ -7,11 +7,14 @@ import com.tk.tliaswebmanagment.pojo.ClazzQueryParam;
 import com.tk.tliaswebmanagment.pojo.PageResult;
 import com.tk.tliaswebmanagment.pojo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+//@Lazy         //懒加载，不是在项目开始的时候创建，而是在第一次使用的时候
+@Scope("")
 @RestController
 public class ClazzController {
     @Autowired
