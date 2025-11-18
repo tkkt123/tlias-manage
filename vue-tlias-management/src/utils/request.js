@@ -1,6 +1,5 @@
 import axios from 'axios'
-import{ElMessage} from 'element-plus'
-import router from '@/router/index.js'
+import { ElMessage } from 'element-plus'
 
 //创建axios实例对象
 const request = axios.create({
@@ -8,38 +7,30 @@ const request = axios.create({
   timeout: 600000
 })
 
-//请求拦截器
+//axios的请求 request 拦截器, 每次请求获取localStorage中的loginUser, 从中获取到token, 在请求头token中携带到服务端
 request.interceptors.request.use(
   (config) => {
-    //加上token请求头
-    const loginUser = JSON.parse(localStorage.getItem('loginUser'))
-    if(loginUser&&loginUser.token){
-      config.headers.token = loginUser.token;
+    let loginUser = JSON.parse(localStorage.getItem('loginUser'))
+    console.log(localStorage.getItem('loginUser'))
+    if (loginUser) {
+      config.headers.token = loginUser.token
     }
-    
     return config
-  },
-  (error) => {
-    return Promise.reject(error)
   }
 )
 
 //axios的响应 response 拦截器
 request.interceptors.response.use(
   (response) => { //成功回调
-    
     return response.data
   },
   (error) => { //失败回调
-    // 统一处理 401 未授权
-    if (error.response && error.response.status === 401) {
-      // 可以显示提示信息
-      ElMessage.error('登录已过期，请重新登录')
-      // 清除本地存储的登录信息
-      localStorage.removeItem('loginUser')
-      // 跳转到登录页
-      router.push('/login')
-
+    //如果响应的状态码为401, 则路由到登录页面
+    if (error.response.status === 401) {
+      ElMessage.error('登录失效, 请重新登录')
+      import('../router').then(routerModule => {
+        routerModule.default.push('/login')
+      })
     }
     return Promise.reject(error)
   }

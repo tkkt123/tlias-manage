@@ -2,7 +2,8 @@
 import { onMounted, ref } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useRouter } from 'vue-router';
-import { changePasswordApi } from '@/api/login';
+import { changePasswordApi } from '@/api/user.js';
+
   const router = useRouter();
   const loginName=ref();
 

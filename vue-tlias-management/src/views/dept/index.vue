@@ -1,155 +1,144 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { queryAllApi, addApi , queryByIdApi,updateApi,deleteApi }  from '@/api/dept.js';
-import { ElMessage,ElMessageBox } from 'element-plus'
+import { ref, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { queryAllApi, addDeptApi, queryInfoApi, updateDeptApi, deleteDeptApi } from '@/api/dept'
 
+// 声明列表展示数据
+let tableData = ref([])
+
+// 动态加载数据 - 查询部门
+const queryAll = async () => {
+  const result = await queryAllApi()
+  tableData.value = result.data
+}
+
+// 钩子函数
 onMounted(() => {
-  search();
-});
+  queryAll()
+})
 
-const search = async () => {
-  const res = await queryAllApi();
-  if(res.code){
-    DeptList.value=res.data;
+const formTitle = ref('')
+//新增部门
+const add = () => {
+  formTitle.value = '新增部门'
+  showDialog.value = true
+  deptForm.value = {name: ''}
+}
+
+// 编辑部门 - 根据ID查询回显数据
+const handleEdit = async (row) => {
+  console.log(`Edit item with ID ${row.id}`);
+  formTitle.value = '修改部门'
+  showDialog.value = true
+  deptForm.value = {name: ''}
+
+  const result = await queryInfoApi(row.id)
+  if(result.code){
+    deptForm.value = result.data
   }
 };
 
-const DeptList = ref([]);
-const dialogFormVisible = ref(false);
-const dept = ref({name: ''});
-const formTitle = ref('');
-
-const addDept = () => {
-  formTitle.value = '新增部门';
-  dept.value = {name: ''};
-  dialogFormVisible.value = true;
-  if(deptFormRef.value){
-    deptFormRef.value.resetFields();
-  }
-};
-const save = async () => {
-  if (!deptFormRef.value) return
-  await deptFormRef.value.validate(async (valid,fields) => {
-    if (valid) {
-        let res;
-        if(dept.value.id){
-          //修改部门
-          res = await updateApi(dept.value);
-        }
-        else {
-          //新增部门
-          res = await addApi(dept.value);
-        }
-        if(res.code){
-          dialogFormVisible.value=false;
-          ElMessage.success("操作成功！");
-          search();
-        }
-        else {
-          ElMessage.error('校验不通过', fields)
-        }
-    }
-    else{
-      ElMessage.error('部门新增失败', res.data);
+// 删除部门 - 根据ID删除部门
+const handleDelete = (row) => {
+  console.log(`Delete item with ID ${row.id}`);
+  //删除部门时, 需要弹出一个确认框, 如果是确认, 则删除部门
+  ElMessageBox.confirm('此操作将永久删除该部门, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    // 删除部门
+    const result = await deleteDeptApi(row.id)
+    if(result.code){
+      ElMessage.success('删除成功')
+      queryAll()
     }
   })
+};
 
-
-
-}
-const rules = ref({
+// 新增部门对话框的状态
+const showDialog = ref(false)
+// 表单数据
+const deptForm = ref({name: ''})
+// 表单验证规则
+const formRules = ref({
   name: [
-    { required: true, message: '部门名称是必填项', trigger: 'blur' },
-    { min: 2, max: 10, message: '部门名称的长度应该在2-10位', trigger: 'blur' }
+    { required: true, message: '请输入部门名称', trigger: 'blur' },
+    { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
   ]
 })
-const deptFormRef = ref();
 
-const editDept = async (id)=>{
-  //很奇怪，这个显示对话框如果放在if里面就不会生效
-  dialogFormVisible.value=true;
-  const res = await queryByIdApi(id);
-  deptFormRef.value.resetFields();
-  if(res.code){
-    formTitle.value='修改部门';
-    dept.value = res.data;
-  }
+// 表单引用
+const deptFormRef = ref(null)
+
+// 重置表单
+const resetForm = () => {
+  deptFormRef.value.resetFields()
 }
 
-const deleteDept = async (id) => {
-  //弹出确认框
-  ElMessageBox.confirm('确定要删除该部门吗','警告',
-    {
-      confirmButtonText: '确认',
-      cancelButtonText: '取消',
-      type: 'warning',
+// 提交表单
+const save = async () => {
+  await deptFormRef.value.validate(async valid => {
+    if (!valid) return
+    // 提交表单
+    let result = null;
+    if(deptForm.value.id){
+      result = await updateDeptApi(deptForm.value) // 修改
+    }else {
+      result = await addDeptApi(deptForm.value) // 新增
+    } 
+    if(result.code){
+      ElMessage.success('操作成功')
+      // 关闭对话框
+      showDialog.value = false
+      // 重置表单
+      resetForm()
+      // 重新加载数据
+      queryAll()
+    }else {
+      ElMessage.error(result.msg)
     }
-  )
-    .then(async () => {
-      const res = await deleteApi(id);
-      if(res.code){
-        ElMessage({
-          type: 'success',
-          message: '删除成功',
-        })
-        search();
-      }
-      else {
-        ElMessage.error('删除失败');
-      }
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '删除已取消',
-      })
-    })
+  })
 }
-
 </script>
 
 <template>
   <h1>部门管理</h1>
-  <div class="container">
-    <el-button type="primary" @click="addDept()"> + 新增部门</el-button>
-  </div>
 
-  <div class="container">
-    <el-table :data="DeptList" border style="width: 100%">
-      <el-table-column type="index" width="100" label="序号" />
-      <el-table-column prop="name" label="部门名称" width="180" />
-      <el-table-column prop="updateTime" label="最后操作时间"  />
-      <el-table-column label="操作" width="200">
-        <template #default="scope">
-          <el-button type="primary" size="default" @click="editDept(scope.row.id)"><el-icon><EditPen /></el-icon>编辑</el-button>
-          <el-button type="danger" size="default" @click="deleteDept(scope.row.id)"><el-icon><Delete /></el-icon>删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <!-- 按钮靠页面右侧显示 -->
+  <el-button type="primary" @click="add()" style="float: right;"> + 新增部门</el-button> <br><br>
 
-  <!-- 对话框组件 -->
-  <el-dialog v-model="dialogFormVisible" :title="formTitle" width="500">
-    <el-form :model="dept" :rules="rules" ref="deptFormRef">
-      <el-form-item label="部门名称" :label-width="'80px'" prop="name">
-        <el-input v-model="dept.name" autocomplete="off" />
+  <!-- 数据展示表格 -->
+  <el-table :data="tableData" border style="width: 100%;">
+    <el-table-column type="index" label="序号" width="100" align="center"/>
+    <el-table-column prop="name" label="部门名称" width="300" align="center"/>
+    <el-table-column prop="updateTime" label="最后修改时间" width="300" align="center"/>
+    <el-table-column fixed="right" label="操作" align="center">
+      <template #default="{ row }">
+        <el-button size="small" @click="handleEdit(row)">修改</el-button>
+        <el-button size="small" type="danger" @click="handleDelete(row)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <!-- 新增部门的对话框 -->
+  <el-dialog v-model="showDialog" :title="formTitle" width="30%" @close="resetForm">
+    <el-form :model="deptForm" :rules="formRules" ref="deptFormRef">
+      <el-form-item label="部门名称" prop="name" label-width="80px">
+        <el-input v-model="deptForm.name" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
 
     <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="save() ">确认</el-button>
-      </div>
+      <span class="dialog-footer">
+        <el-button @click="showDialog = false">取消</el-button>
+        <el-button type="primary" @click="save">确定</el-button>
+      </span>
     </template>
   </el-dialog>
+
 </template>
 
-<!--删除提示框-->
-
-
 <style scoped>
-.container {
-  margin: 10px 0 ;
-}
+
 </style>

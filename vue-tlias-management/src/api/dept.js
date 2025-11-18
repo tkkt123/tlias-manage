@@ -1,26 +1,16 @@
-import request from "@/utils/request";
+import request from '@/utils/request'
 
 //查询全部部门
-export const queryAllApi = () => {
-    return request.get('/depts');
-}
+export const queryAllApi = () => request.get('/depts')
 
-//新增部门
-export const addApi = (data) => {
-    return request.post('/depts', data);
-}
+//添加部门
+export const addDeptApi = (data) => request.post('/depts', data)
 
-//根据id查询部门
-export const queryByIdApi = (id) => {
-    return request.get(`/depts/${id}`);
-}
+//根据ID查询
+export const queryInfoApi = (id) => request.get(`/depts/${id}`)
 
 //修改部门
-export const updateApi = (dept) => {
-    return request.put('/depts', dept);
-}
+export const updateDeptApi = (data) => request.put('/depts', data)
 
 //删除部门
-export const deleteApi = (ids) => {
-    return request.delete(`/depts?ids=${ids}`);
-}
+export const deleteDeptApi = (id) => request.delete(`/depts?id=${id}`)
